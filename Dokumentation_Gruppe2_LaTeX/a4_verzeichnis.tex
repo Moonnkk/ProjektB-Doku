@@ -1,0 +1,88 @@
+% !TEX root = master.tex
+\chapter{Verzeichnisstruktur (Backend / Webserver)}
+\label{ch:a-verzeichnis}
+
+Das Projektverzeichnis wird vollst\"andig in das Webserver-Wurzelverzeichnis (bei XAMPP
+\texttt{htdocs}) installiert. Alle internen Pfade sind relativ aufgel\"ost, sodass das Projekt
+unabh\"angig vom Ordnernamen lauff\"ahig ist. Die folgende \"Ubersicht zeigt die Struktur:
+
+\begin{lstlisting}[numbers=none]
+guardx/
+|-- index.php                 Startseite / Dashboard
+|-- init.php                  Session-Start, Timeout, CSRF-Token
+|-- config.php                Zentrale Konfiguration (DB-Verbindung)
+|-- functions.php             Server-Hilfsfunktionen (IP, Pfade, Mobile)
+|-- functions.js              Client-Logik (Session-Timer, Menue)
+|-- auth.php                  Login / Registrierung / Logout
+|-- user.php                  Persoenlicher Bereich (Profil)
+|-- admin.php                 Admin-Bereich (Benutzerverwaltung, CRUD)
+|-- admin_logout.php          Logout-Endpunkt
+|-- keep_alive.php            Session am Leben halten (AJAX-Ziel)
+|-- impressum.php             Impressum
+|-- datenschutz.php           Datenschutzerklaerung
+|-- agb.php                   AGB
+|-- php.ini.hinweise          Hinweise zu benoetigten PHP-Extensions
+|
+|-- db/
+|   |-- users.sql             Aktueller DB-Dump (Struktur + Daten)
+|   |-- init_databases.sql    Aelterer Dump (siehe Hinweis Kap. 8)
+|
+|-- include/
+|   |-- api-calls/
+|   |   |-- skript.php         Oberflaeche Live-Passwort-Checker
+|   |   |-- check.php          AJAX-Endpunkt: Staerke + Leak-Abgleich
+|   |-- fingerprinting/
+|   |   |-- info.php           Modul Browser-Fingerprinting
+|   |-- metadata_stripping/
+|       |-- metadata_stripping.php  Modul Metadaten-Bereiniger
+|       |-- uploads/           (zur Laufzeit erzeugt) Upload-Ablage
+|       |-- clean/             (zur Laufzeit erzeugt) bereinigte Bilder + JSON
+|
+|-- template/
+|   |-- navbar.php             Desktop-Navigation
+|   |-- navbar_mobile.php      Mobile Navigation (Hamburger)
+|   |-- footer.php             Footer mit Rechts-Links
+|
+|-- style/
+    |-- main.css               Basis-/Layout-Styles (Cyber-Theme)
+    |-- navbar.css             Navigationsstyles
+    |-- metadata_stripping.css Styles des Metadaten-Moduls
+\end{lstlisting}
+
+\noindent Die Verzeichnisse \texttt{include/metadata\_stripping/uploads/} und
+\texttt{.../clean/} werden vom Modul bei Bedarf automatisch angelegt; sie m\"ussen f\"ur den
+Webserver-Benutzer beschreibbar sein. Tabelle~\ref{tab:a-verzeichnis} fasst die Aufgaben der
+wichtigsten Komponenten zusammen.
+
+\begin{small}
+\begin{longtable}{@{}L{4.4cm} L{9.9cm}@{}}
+\caption{Komponenten von Projekt~A}
+\label{tab:a-verzeichnis}\\
+\toprule
+\textbf{Datei / Verzeichnis} & \textbf{Aufgabe} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Datei / Verzeichnis} & \textbf{Aufgabe} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{init.php} & Startet/erneuert die Session, erzwingt das Inaktivit\"ats-Timeout und erzeugt das CSRF-Token. Wird von praktisch allen Seiten eingebunden. \\
+\texttt{config.php} & Zentrale Konfigurationsdatei mit den Verbindungsdaten zur Datenbank; wird per \texttt{require\_once} eingebunden. \\
+\texttt{functions.php} & Serverseitige Hilfsfunktionen: sichere IP-Ermittlung, Pfad-Helfer (\texttt{get\_url}), Mobile-Erkennung (\texttt{is\_mobile}). \\
+\texttt{functions.js} & Clientseitige Logik: Session-Timer mit jQuery-UI-Dialog, mobiles Men\"u, Login-Weiterleitung. \\
+\texttt{auth.php} & Registrierung, Login und Logout inkl.\ Validierung, Hashing, Brute-Force- und Rate-Limit-Schutz. \\
+\texttt{user.php} & Pers\"onlicher Bereich: E-Mail/Passwort \"andern, Account l\"oschen. \\
+\texttt{admin.php} & Admin-Bereich mit vollst\"andiger Benutzerverwaltung (Anlegen, \"Andern, Rolle, L\"oschen). \\
+\texttt{include/api-calls/} & Live-Passwort-Checker: Oberfl\"ache (\texttt{skript.php}) und AJAX-Endpunkt (\texttt{check.php}). \\
+\texttt{include/fingerprinting/} & Modul Browser-Fingerprinting (\texttt{info.php}). \\
+\texttt{metadata\_stripping/} & Modul Metadaten-Bereiniger inkl.\ Lauf\-zeit-Ordnern f\"ur Upload und bereinigte Ausgabe. \\
+\texttt{template/} & Wiederverwendbare Bausteine: Desktop-/Mobil-Navigation und Footer. \\
+\texttt{style/} & Stylesheets f\"ur Layout, Navigation und Metadaten-Modul. \\
+\texttt{db/} & SQL-Dumps der Datenbank (Struktur und Daten). \\
+\bottomrule
+\end{longtable}
+\end{small}

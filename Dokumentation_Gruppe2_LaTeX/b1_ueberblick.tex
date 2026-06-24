@@ -1,0 +1,36 @@
+% !TEX root = master.tex
+\chapter{\"Uberblick und Umfang}
+\label{ch:b-ueberblick}
+
+\emph{SunShine~Tours} ist eine als Demonstrationsprojekt umgesetzte Web-Seite f\"ur einen
+fiktiven Anbieter von St\"adtereisen. Die inhaltliche Ausgestaltung ist bewusst satirisch
+gehalten; technisch handelt es sich um eine serverseitig mit \ac{php} erzeugte Web-Anwendung,
+die ohne Datenbank auskommt und ihre Daten dateibasiert (im \ac{json}-Format) ablegt.
+
+\section{Seiten\"ubersicht}
+Die Anwendung besteht aus mehreren Inhaltsseiten mit gemeinsamem Kopf- und Fu\ss{}bereich:
+\begin{itemize}
+  \item \textbf{Startseite} (\texttt{index.php}) -- Einstieg mit Hero-Bereich und Kennzahlen.
+  \item \textbf{\"Uber uns} (\texttt{about.php}) -- Vorstellung des (fiktiven) Teams und der
+        Unternehmenswerte.
+  \item \textbf{Touren / Kundenstimmen} (\texttt{tours.php}) -- Tour\-angebote und mehrere
+        Kundenbewertungen.
+  \item \textbf{Buchung} (\texttt{booking.php}) -- Buchungsformular mit Echtzeit-Kostenanzeige.
+  \item \textbf{Best\"atigung} (\texttt{confirmation.php}) -- Zusammenfassung nach erfolgreicher
+        Buchung.
+  \item \textbf{Rechtliches} (\texttt{legal.php}) -- Impressum, Datenschutz und AGB.
+  \item \textbf{Formular-Test} (\texttt{formcheck.php}) -- kleine Seite zur Demonstration der
+        GET-/POST-Verarbeitung.
+\end{itemize}
+
+\section{Gestaltung und technischer Umfang}
+Das Layout folgt der Struktur Kopfbereich--Inhalt--Fu\ss{}bereich und ist responsiv umgesetzt.
+Die Farbgebung (Gelb-, Orange- und Gr\"unt\"one) ist \"uber \ac{css}-Variablen zentral definiert,
+wodurch sich auch ein Hell-/Dunkel-Modus realisieren l\"asst. Das Logo ist vollst\"andig in
+\ac{css} gestaltet (ohne Bilddatei). Die auf den Seiten verwendeten St\"adtebilder wurden mit
+einem KI-Bildgenerator erzeugt (vgl.\ Kapitel~\ref{ch:b-kitools}).
+
+Der technische Umfang umfasst sieben PHP-Seiten, zwei gemeinsame Includes (Kopf- und
+Fu\ss{}bereich), zwei JavaScript-Dateien (Buchungslogik und allgemeine Oberfl\"achenfunktionen)
+sowie ein zentrales Stylesheet. Eine Datenbank wird nicht ben\"otigt; Buchungen werden als
+\ac{json}-Dateien gespeichert.

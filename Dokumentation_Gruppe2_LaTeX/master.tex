@@ -1,0 +1,223 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Projektdokumentation Web-Engineering II - SoSe2026
+%  Gruppe2 - Projekt A (GuardX) + Projekt B (SunShine Tours)
+%
+%  Basiert auf dem DHBW-Mannheim-LaTeX-Template
+%  (Drabant / Pfisterer / Reichwald), schlank angepasst
+%  fuer eine Projektdokumentation.
+%
+%  Kompilieren:  pdflatex master  ->  biber master  ->
+%                pdflatex master  ->  pdflatex master
+%  (oder einfach:  latexmk -pdf master)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[fontsize=12pt,BCOR=5mm,DIV=15,parskip=half,listof=totoc,
+               paper=a4,toc=bibliography,pointlessnumbers]{scrreprt}
+
+%% Sprache & Kodierung
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[ngerman]{babel}
+\usepackage[german=quotes]{csquotes}
+
+%% Literatur (biblatex + biber)
+\usepackage[backend=biber, autocite=inline, style=numeric]{biblatex}
+\addbibresource{bibliography.bib}
+\DefineBibliographyStrings{ngerman}{andothers = {{et\,al\adddot}},}
+
+%% Grafik, Tabellen, Code
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage[german]{varioref}
+\usepackage[nohyperlinks]{acronym}
+\usepackage{setspace}
+\usepackage{tocloft}
+\usepackage{fnpct}
+\usepackage{calc}
+\usepackage[hidelinks=true]{hyperref}
+
+%% Schriftfamilie ohne Serifen (wie im DHBW-Template)
+\renewcommand*{\familydefault}{\sfdefault}
+\addtokomafont{disposition}{\sffamily}
+\addtokomafont{chapter}{\Large}
+\addtokomafont{section}{\large}
+\addtokomafont{subsection}{\normalsize}
+\addtokomafont{part}{\LARGE}
+\setlength{\emergencystretch}{3em}
+
+%% Tabellen lesbarer: linksbuendiger Flattersatz statt Blocksatz,
+%% etwas mehr Zeilenhoehe. \newcolumntype{L} = ragged-right p-Spalte.
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\renewcommand{\tabularxcolumn}[1]{>{\raggedright\arraybackslash}p{#1}}
+\renewcommand{\arraystretch}{1.18}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Kopf- und Fusszeile
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\RequirePackage[automark]{scrlayer-scrpage}
+\renewcommand{\chaptermarkformat}{}
+\RedeclareSectionCommand[beforeskip=0pt]{chapter}
+\clearpairofpagestyles
+\ofoot[\rule{0pt}{\ht\strutbox+\dp\strutbox}\pagemark]{\rule{0pt}{\ht\strutbox+\dp\strutbox}\pagemark}
+\ohead{\headmark}
+
+%% Part-Titel oben auf der Seite statt vertikal zentriert,
+%% damit das nachfolgende Kapitel auf derselben Seite beginnen kann.
+\renewcommand*\partheadstartvskip{\vspace*{2\baselineskip}}
+\renewcommand*\partheadendvskip{\vskip 2\baselineskip}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Metadaten
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\imagedir}{img}
+% Rot markierte Platzhalter, die das Team noch ausfuellen sollte:
+\newcommand{\platzhalter}[1]{\textcolor{red}{[#1]}}
+
+% Platzhalterbox fuer noch einzufuegende Screenshots
+\newcommand{\screenshot}[1]{%
+  \fbox{\begin{minipage}[c][4.2cm][c]{0.82\textwidth}%
+  \centering\itshape\color{gray} Platzhalter f\"ur Screenshot:\\[2mm] #1%
+  \end{minipage}}%
+}
+
+\hypersetup{pdftitle={GuardX und SunShine Tours - Projektdokumentation},
+            pdfauthor={Gruppe2}}
+
+%% Titelseiten-Angaben
+\newcommand{\DieArtDerArbeit}{Projektdokumentation}
+\newcommand{\DerTitelDerArbeit}{GuardX \& SunShine Tours}
+\newcommand{\DerUntertitel}{Dokumentation der Web-Engineering-II-Projekte A und B}
+\newcommand{\DieKursbezeichnung}{MA-TINF25CS2}
+\newcommand{\DerStudiengang}{Informatik - Cyber Security}
+\newcommand{\DerWissBetreuer}{Dipl.-Ing.\ Udo Erdmann}
+\newcommand{\DerStudiengangsleiter}{\platzhalter{Name Studiengangsleiter}}
+\newcommand{\DerBearbeitungszeitraum}{Sommersemester 2026}
+\newcommand{\DasAbgabedatum}{30.06.2026}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Listings-Stil (PHP / JS / SQL)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\lstlistingname}{Quelltext}
+\renewcommand{\lstlistlistingname}{Quelltextverzeichnis}
+
+\definecolor{codebg}{rgb}{0.97,0.97,0.97}
+\definecolor{codekw}{rgb}{0.13,0.29,0.53}
+\definecolor{codecomment}{rgb}{0.30,0.55,0.30}
+\definecolor{codestring}{rgb}{0.64,0.08,0.08}
+\definecolor{codenum}{rgb}{0.5,0.5,0.5}
+
+\lstdefinestyle{projektstil}{
+    backgroundcolor=\color{codebg},
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{codekw}\bfseries,
+    commentstyle=\color{codecomment}\itshape,
+    stringstyle=\color{codestring},
+    numberstyle=\tiny\color{codenum},
+    numbers=left,
+    numbersep=8pt,
+    captionpos=b,
+    breaklines=true,
+    showstringspaces=false,
+    frame=single,
+    rulecolor=\color{gray!40},
+    tabsize=2,
+    columns=fullflexible,
+    upquote=true,
+    extendedchars=true,
+    literate={ä}{{\"a}}1 {ö}{{\"o}}1 {ü}{{\"u}}1
+             {Ä}{{\"A}}1 {Ö}{{\"O}}1 {Ü}{{\"U}}1
+             {ß}{{\ss}}1
+}
+\lstset{style=projektstil}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+%%% Titelseite
+\input{titlepage}
+\pagenumbering{roman}
+\normalfont
+
+%%% Verzeichnisse
+\tableofcontents
+\cleardoublepage
+
+\phantomsection
+\addcontentsline{toc}{chapter}{\listfigurename}
+\listoffigures
+\enlargethispage{3\baselineskip}
+\begingroup
+  \let\clearpage\relax
+  \let\cleardoublepage\relax
+  \vspace{0.5\baselineskip}
+  \phantomsection
+  \addcontentsline{toc}{chapter}{\listtablename}
+  \listoftables
+  \vspace{0.5\baselineskip}
+  \lstlistoflistings
+  \vspace{0.5\baselineskip}
+  \input{acronyms}
+\endgroup
+\cleardoublepage
+
+\onehalfspacing
+
+%%% Beginn Fliesstext
+\clearpage
+\ihead{\chaptername~\thechapter}
+\pagenumbering{arabic}
+
+\input{introduction}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  TEIL I  -  PROJEKT A: GuardX
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\part{Projekt A: GuardX}
+\let\svdclearpage\clearpage
+\let\svdcleardoublepage\cleardoublepage
+\let\clearpage\relax
+\let\cleardoublepage\relax
+\input{a1_referenz}
+\let\clearpage\svdclearpage
+\let\cleardoublepage\svdcleardoublepage
+\input{a2_backlog}
+\input{a3_frontend}
+\input{a4_verzeichnis}
+\input{a5_datenbank}
+\input{a6_funktionen}
+\input{a7_installation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  TEIL II -  PROJEKT B: SunShine Tours
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\part{Projekt B: SunShine Tours}
+\let\svdclearpage\clearpage
+\let\svdcleardoublepage\cleardoublepage
+\let\clearpage\relax
+\let\cleardoublepage\relax
+\input{b1_ueberblick}
+\input{b2_ki_tools}
+\let\clearpage\svdclearpage
+\let\cleardoublepage\svdcleardoublepage
+\input{b3_funktionen}
+\input{b4_verzeichnis}
+\input{b5_installation}
+
+%%% Fazit
+\input{conclusion}
+
+\singlespacing
+
+%%% Literaturverzeichnis
+\ihead{}
+\printbibliography
+\cleardoublepage
+
+\end{document}

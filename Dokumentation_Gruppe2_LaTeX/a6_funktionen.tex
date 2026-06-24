@@ -1,0 +1,99 @@
+% !TEX root = master.tex
+\chapter{Funktionale Umsetzung: Funktion und Skript}
+\label{ch:a-funktionen}
+
+Dieses Kapitel ordnet jede geforderte Funktionalit\"at dem Skript bzw.\ der Datei zu, in der sie
+umgesetzt ist. Damit ist nachvollziehbar, wo eine bestimmte Funktion zu finden ist
+(vgl.\ Abgabevorgabe zur Nachvollziehbarkeit). Tabelle~\ref{tab:a-funktionen} gibt die
+vollst\"andige Zuordnung an.
+
+\begingroup
+\small
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.3}
+\begin{longtable}{@{}L{4.2cm} L{4.6cm} L{4.7cm}@{}}
+\caption{Zuordnung Funktionalit\"at zu Skript (Projekt~A)}
+\label{tab:a-funktionen}\\
+\toprule
+\textbf{Funktionalit\"at} & \textbf{Skript / Datei} & \textbf{Kurzbeschreibung} \\
+\midrule
+\endfirsthead
+\multicolumn{3}{@{}l}{\small\itshape Tabelle \thetable{} -- Fortsetzung}\\
+\midrule
+\textbf{Funktionalit\"at} & \textbf{Skript / Datei} & \textbf{Kurzbeschreibung} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r@{}}{\footnotesize\itshape Fortsetzung n\"achste Seite}\\
+\endfoot
+\bottomrule
+\endlastfoot
+
+\multicolumn{3}{@{}l}{\textbf{Account, Session und Rechteverwaltung}}\\*
+\addlinespace[0.4ex]
+Sessionverwaltung & \texttt{init.php} & Session-Start und -Wiederherstellung, CSRF-Token \\
+Login / Logout & \texttt{auth.php}, \texttt{admin\_logout.php} & Anmeldung, Rollenweiterleitung, Abmeldung \\
+Registrierung & \texttt{auth.php} & Serverseitige Pr\"ufung neuer Konten \\
+Automatisches Logout & \texttt{init.php}, \texttt{functions.js} & Timeout-Pr\"ufung (Server) und Warndialog (Client) \\
+Benutzerverwaltung (CRUD) & \texttt{admin.php} & Anlegen, \"Andern, Rolle, L\"oschen \\
+Rechteverwaltung (Rollen) & \texttt{init.php}, \texttt{admin.php} & Zugriffsschutz \"uber \texttt{is\_admin} \\
+Self-Service-Profil & \texttt{user.php} & E-Mail/Passwort \"andern, Account l\"oschen \\
+Zentrale Konfiguration & \texttt{config.php} & DB-Zugangsdaten, per \texttt{require\_once} \\
+\addlinespace[0.8ex]
+
+\multicolumn{3}{@{}l}{\textbf{Sicherheit}}\\*
+\addlinespace[0.4ex]
+CSRF-Schutz & \texttt{init.php} (+ Pr\"ufung in \texttt{admin.php}, \texttt{user.php}, \texttt{auth.php}) & Token-Erzeugung und -Pr\"ufung je Formular \\
+Passwort-Hashing & \texttt{auth.php} & bcrypt via \texttt{password\_hash}/\texttt{verify} \\
+Brute-Force-Schutz & \texttt{auth.php}, Tabelle \texttt{login\_logs} & Sperre nach mehreren Fehlversuchen \\
+Rate-Limiting (Registrierung) & \texttt{auth.php}, Tabelle \texttt{register\_logs} & Begrenzung neuer Konten pro IP \\
+Prepared Statements & \texttt{auth.php}, \texttt{admin.php}, \texttt{user.php} & Schutz vor SQL-Injection \\
+Eingabevalidierung (RegExp) & \texttt{functions.js}, \texttt{check.php}, \texttt{auth.php} & Client- und serverseitig, regul\"are Ausdr\"ucke \\
+\addlinespace[0.8ex]
+
+\multicolumn{3}{@{}l}{\textbf{Oberfl\"ache, Bibliotheken und AJAX}}\\*
+\addlinespace[0.4ex]
+jQuery / jQuery~UI & \texttt{functions.js} & Timeout-Dialog, DOM-Interaktion \\
+Bootstrap-Einbindung & \texttt{template/}, \texttt{style/} & Layout- und Komponentenraster \\
+AJAX-Nachladen & \texttt{api-calls/check.php}, \texttt{keep\_alive.php} & Live-Pr\"ufung, Session-Verl\"angerung \\
+Meldungs-/Best\"atigungsdialoge & \texttt{functions.js}, \texttt{template/footer.php} & \texttt{confirm()} und jQuery-UI-Dialog \\
+Dynamische, responsive Navigation & \texttt{template/navbar.php}, \texttt{navbar\_mobile.php} & rollenabh\"angig, \texttt{is\_mobile()}, \texttt{get\_url()} \\
+\addlinespace[0.8ex]
+
+\multicolumn{3}{@{}l}{\textbf{Fachmodule und weitere Seiten}}\\*
+\addlinespace[0.4ex]
+JSON-Datenexport & \texttt{metadata\_stripping.php} & EXIF-Daten als JSON-Download \\
+Datei-Upload & \texttt{metadata\_stripping.php} & Bild-Upload und -Bereinigung \\
+Externer API-Aufruf & \texttt{api-calls/check.php} & Leak-Abgleich (HaveIBeenPwned) \\
+Browser-Fingerprinting & \texttt{fingerprinting/info.php} & Canvas, WebGL, Zeitzone u.\,a. \\
+Rechtsseiten & \texttt{impressum.php}, \texttt{datenschutz.php}, \texttt{agb.php} & \"uber den Footer verlinkt \\
+\end{longtable}
+\endgroup
+
+\section{Sicherheitsmechanismen im Detail}
+Die sicherheitsrelevanten Funktionen sind bewusst zentral umgesetzt:
+
+\textbf{CSRF-Schutz.} F\"ur jede Session wird in \texttt{init.php} ein Zufalls-Token erzeugt. Jedes
+schreibende Formular f\"uhrt das Token mit; serverseitig wird es zeitkonstant gepr\"uft, bevor eine
+Aktion ausgef\"uhrt wird~\autocite{owasp-csrf}.
+
+\begin{lstlisting}[language=PHP,caption={Zeitkonstante CSRF-Pr\"ufung (Auszug \texttt{admin.php})},label={lst:a-csrf}]
+if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+    die("CSRF Token ungültig!");
+}
+\end{lstlisting}
+
+\textbf{Passwort-Hashing.} Passw\"orter werden nie im Klartext gespeichert, sondern mit dem
+bcrypt-Verfahren \"uber \texttt{password\_hash()} gehasht und beim Login mit
+\texttt{password\_verify()} gepr\"uft~\autocite{php-passwordhash}.
+
+\textbf{Prepared Statements.} S\"amtliche Datenbankabfragen verwenden parametrisierte Abfragen,
+sodass Benutzereingaben nicht als SQL interpretiert werden k\"onnen.
+
+\textbf{Brute-Force- und Rate-Limiting.} Fehlgeschlagene Logins werden in \texttt{login\_logs}
+protokolliert und f\"uhren nach mehreren Versuchen zu einer tempor\"aren Sperre; Registrierungen
+werden \"uber \texttt{register\_logs} je IP begrenzt.
+
+\textbf{Datenschutzfreundlicher Leak-Abgleich.} Beim Passwort-Check wird nur ein Pr\"afix des
+SHA-1-Hashes an die externe API gesendet (k-Anonymity); der Abgleich der vollst\"andigen Hashes
+erfolgt lokal~\autocite{hibp-range}.

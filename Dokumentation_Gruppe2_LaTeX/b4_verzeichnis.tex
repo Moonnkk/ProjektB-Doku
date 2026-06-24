@@ -1,0 +1,73 @@
+% !TEX root = master.tex
+\chapter{Verzeichnisstruktur (Backend / Webserver)}
+\label{ch:b-verzeichnis}
+
+Wie Projekt~A wird auch SunShine~Tours vollst\"andig in das Webserver-Wurzelverzeichnis kopiert.
+Die folgende \"Ubersicht zeigt die Struktur:
+
+\begin{lstlisting}[numbers=none]
+sunshine-tours/
+|-- index.php              Startseite
+|-- about.php              Ueber uns / Team
+|-- tours.php              Touren und Kundenstimmen
+|-- booking.php            Buchungsformular
+|-- process_booking.php    Verarbeitung + Speicherung der Buchung
+|-- confirmation.php       Buchungsbestaetigung
+|-- legal.php              Impressum / Datenschutz / AGB
+|-- formcheck.php          GET-/POST-Testseite
+|-- visitor_count.txt      Zaehlerstand Besucherzaehler (beschreibbar)
+|
+|-- includes/
+|   |-- header.php         Kopfbereich + Navigation + Theme-Schalter
+|   |-- footer.php         Fussbereich + News-Ticker + Besucherzaehler
+|
+|-- js/
+|   |-- booking.js         Echtzeit-Kosten, dynamische Felder, Validierung
+|   |-- main.js            Hell-/Dunkel-Modus, mobiles Menue
+|
+|-- css/
+|   |-- style.css          Farbschema, Layout, responsive Regeln
+|
+|-- images/
+|   |-- paris.jpg, bielefeld.jpg, chernobyl.jpg,
+|   |-- gary.jpg, pyongyang.jpg     (KI-generierte Bilder)
+|
+|-- bookings/
+    |-- ST-JJJJMMTT-XXXXXX.json     gespeicherte Buchungen (beschreibbar)
+\end{lstlisting}
+
+\noindent Tabelle~\ref{tab:b-verzeichnis} fasst die Aufgaben der Komponenten zusammen.
+
+\begin{small}
+\begin{longtable}{@{}L{4.4cm} L{10.0cm}@{}}
+\caption{Komponenten von Projekt~B}
+\label{tab:b-verzeichnis}\\
+\toprule
+\textbf{Datei / Verzeichnis} & \textbf{Aufgabe} \\
+\midrule
+\endfirsthead
+\toprule
+\textbf{Datei / Verzeichnis} & \textbf{Aufgabe} \\
+\midrule
+\endhead
+\bottomrule
+\endfoot
+\bottomrule
+\endlastfoot
+\texttt{index.php} & Startseite mit Hero-Bereich und Kennzahlen. \\
+\texttt{about.php} & Vorstellung des fiktiven Teams und der Werte. \\
+\texttt{tours.php} & Tourangebote und Kundenbewertungen. \\
+\texttt{booking.php} & Buchungsformular mit Echtzeit-Kostenanzeige. \\
+\texttt{process\_booking.php} & Wertet die Buchung aus, berechnet den Preis, maskiert die Kartennummer und speichert die Buchung als JSON. \\
+\texttt{confirmation.php} & Zeigt die Zusammenfassung der Buchung. \\
+\texttt{legal.php} & Impressum, Datenschutz und AGB. \\
+\texttt{formcheck.php} & Demonstration der GET-/POST-Verarbeitung. \\
+\texttt{includes/} & Gemeinsamer Kopf- und Fu\ss{}bereich (Navigation, Theme-Schalter, News-Ticker, Besucherz\"ahler). \\
+\texttt{js/} & Clientlogik: Buchungsberechnung (\texttt{booking.js}) und Oberfl\"achenfunktionen (\texttt{main.js}). \\
+\texttt{css/} & Zentrales Stylesheet inkl.\ Hell-/Dunkel-Modus. \\
+\texttt{images/} & KI-generierte St\"adtebilder. \\
+\texttt{bookings/} & Ablageverzeichnis der gespeicherten Buchungen (zur Laufzeit beschrieben). \\
+\texttt{visitor\_count.txt} & Persistenter Z\"ahlerstand des Besucherz\"ahlers. \\
+\bottomrule
+\end{longtable}
+\end{small}

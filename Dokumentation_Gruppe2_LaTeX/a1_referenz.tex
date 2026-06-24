@@ -1,0 +1,107 @@
+% !TEX root = master.tex
+\chapter{Referenzdokument}
+\label{ch:a-referenz}
+
+\section{Ziele}
+\emph{GuardX} ist ein modulares \enquote{Web Security \& Privacy Toolkit}. Ziel des Projekts ist
+eine Web-App, die registrierten Nutzerinnen und Nutzern mehrere praxisnahe Werkzeuge rund um
+digitale Sicherheit und Privatsph\"are an einer Stelle bereitstellt und dabei selbst nach
+g\"angigen Sicherheitsprinzipien aufgebaut ist. Die App verfolgt damit einen doppelten Zweck:
+Zum einen liefert sie konkreten Nutzen (Passw\"orter pr\"ufen, Bild-Metadaten entfernen,
+Tracking-Risiken verstehen), zum anderen demonstriert sie die im Modul geforderten technischen
+Konzepte -- insbesondere Sessionverwaltung, sichere Authentifizierung, Rechteverwaltung und
+Datenbankzugriffe.
+
+\section{Funktionsrahmen}
+Die Anwendung gliedert sich in einen \textbf{Account- und Verwaltungsbereich} und drei
+\textbf{Fachmodule}.
+
+Der Account- und Verwaltungsbereich umfasst:
+\begin{itemize}
+  \item Registrierung, Login und Logout mit serverseitiger Validierung,
+  \item Sessionverwaltung mit automatischem Logout nach konfigurierbarer Inaktivit\"at,
+  \item einen Admin-Bereich mit vollst\"andiger Benutzerverwaltung (\ac{crud}),
+  \item Passwortverwaltung (\"Andern durch Nutzer, Zur\"ucksetzen durch Admin) und
+  \item eine Rechteverwaltung mit den Rollen \emph{Admin} und \emph{User}.
+\end{itemize}
+
+Die drei Fachmodule sind:
+\begin{itemize}
+  \item \textbf{Metadaten-Bereiniger}: Entfernt \ac{exif}-Daten aus hochgeladenen Bildern und
+        bietet die ausgelesenen Metadaten als \ac{json}-Datei zum Download an.
+  \item \textbf{Browser-Fingerprinting}: Macht sichtbar, welche Merkmale (Canvas, WebGL,
+        Zeitzone, Sprache, Hardware) einen Browser identifizierbar machen.
+  \item \textbf{Live-Passwort-Checker}: Pr\"uft per \ac{ajax} in Echtzeit die Passwortst\"arke und
+        gleicht das Passwort datenschutzfreundlich (k-Anonymity) gegen bekannte Datenlecks ab.
+\end{itemize}
+
+Querschnittlich werden die geforderten Technologien eingesetzt: client- und serverseitige
+Eingabepr\"ufung (u.\,a. mit regul\"aren Ausdr\"ucken), Einbindung von jQuery/jQuery~UI und
+Bootstrap, dynamisches Nachladen via \ac{ajax}, Meldungs- und Best\"atigungsdialoge, Datenexport
+via \ac{json} sowie eine dynamische, responsive Men\"ustruktur. Eine vollst\"andige Zuordnung
+dieser Funktionen zu den jeweiligen Skripten findet sich in Kapitel~\ref{ch:a-funktionen}.
+
+\section{Projektrahmen}
+Das Projekt wurde als zeitlich begrenzte Teamarbeit von vier Personen im Sommersemester~2026
+umgesetzt. Die technologischen Rahmenbedingungen entsprechen den Projektvorgaben:
+
+\begin{table}[htbp]
+\centering
+\caption{Technologischer Rahmen von Projekt~A}
+\label{tab:a-rahmen}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\textbf{Bereich} & \textbf{Technologie} \\
+\midrule
+Client       & HTML5, \ac{css}, JavaScript; jQuery, jQuery~UI, Bootstrap~5.3 \\
+Server       & Apache, \ac{php}~8.2.4 (ohne Framework) \\
+Datenbank    & MariaDB~10.4.28 \\
+Laufzeitumgebung & XAMPP \\
+Versionsverwaltung & Git / GitHub \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Auf den Einsatz fertiger Frameworks (z.\,B. Angular, Vue, Symfony, React) wurde vorgabengem\"a\ss{}
+verzichtet; eingesetzt werden ausschlie\ss{}lich die erlaubten Bibliotheken jQuery, jQuery~UI und
+Bootstrap.
+
+\section{Umsetzungsstrategie}
+Die Entwicklung erfolgte iterativ und arbeitsteilig. Zur Zusammenarbeit wurde ein
+Git-Feature-Branch-Workflow genutzt: Neue Funktionen wurden in eigenen Branches entwickelt,
+per Pull-Request zusammengef\"uhrt und vor dem Merge daraufhin gepr\"uft, ob die Anwendung unter
+XAMPP lauff\"ahig bleibt. Wiederkehrende Bestandteile (Header/Navigation, Footer, Konfiguration)
+wurden als wiederverwendbare Includes ausgelagert, sodass alle Seiten ein einheitliches
+Erscheinungsbild und Verhalten besitzen. Sicherheitsrelevante Mechanismen
+(\ac{csrf}-Schutz, Passwort-Hashing, Prepared Statements) wurden von Beginn an mitgedacht und
+sind zentral umgesetzt. Vor der Abgabe wurde die Installierbarkeit auf einem frischen System
+getestet.
+
+\section{Aufgaben und Zust\"andigkeiten}
+Die Arbeitspakete wurden wie in Tabelle~\ref{tab:a-zustaendig} dargestellt verteilt. Die
+Zuordnung orientiert sich an den jeweils verantworteten Komponenten; \"ubergreifende Aufgaben
+(Code-Reviews, Integration, Test) wurden gemeinsam wahrgenommen.
+
+\begin{table}[htbp]
+\centering
+\caption{Aufgaben und Zust\"andigkeiten in Projekt~A}
+\label{tab:a-zustaendig}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\textbf{Teammitglied} & \textbf{Verantwortungsbereich} \\
+\midrule
+Maik Baumg\"artner & Backend: Session- und Benutzerverwaltung, Login/Logout/Registrierung,
+  Admin-Bereich, Datenbankanbindung und -schema, zentrale Hilfsfunktionen sowie
+  Navigations-Templates. \\
+\addlinespace
+Marcel Reinholz & Footer und alle dar\"uber verlinkten Rechtsseiten (Impressum, Datenschutz,
+  AGB) sowie das Modul der API-Aufrufe (Live-Passwort-Checker, Leak-Abgleich). \\
+\addlinespace
+Jakob Goelden & Modul Browser-Fingerprinting (\texttt{info.php}) sowie Einrichtung und
+  Pflege des GitHub-Repositories (Branch-/Merge-Strategie, Versionsverwaltung). \\
+\addlinespace
+Moritz Brenner & Modul Metadaten-Bereiniger, das durchg\"angige \ac{css}-Design
+  (Layout, Cyber-Theme, responsive Anpassungen) sowie die Startseite. \\
+\bottomrule
+\end{tabularx}
+\end{table}

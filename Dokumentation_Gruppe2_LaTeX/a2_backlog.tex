@@ -1,0 +1,56 @@
+% !TEX root = master.tex
+\chapter{Product-Backlog}
+\label{ch:a-backlog}
+
+Das Product-Backlog wurde \"uber die gesamte Projektlaufzeit gepflegt und priorisiert. Es
+bildet die umgesetzten Anforderungen ab und ordnet jeder Anforderung eine Priorit\"at, eine
+Aufwandssch\"atzung in Story~Points (SP), die verantwortliche Person sowie den Bearbeitungsstatus
+zu. Zum Abgabezeitpunkt sind alle Eintr\"age umgesetzt. Tabelle~\ref{tab:a-backlog} zeigt das
+vollst\"andige Backlog.
+
+\begin{small}
+\begin{longtable}{@{}L{0.95cm} L{6.9cm} L{1.1cm} L{0.7cm} L{1.7cm} L{1.6cm}@{}}
+\caption{Product-Backlog Projekt~A (GuardX)}
+\label{tab:a-backlog}\\
+\toprule
+\textbf{Nr.} & \textbf{Anforderung} & \textbf{Prio} & \textbf{SP} & \textbf{Zust\"andig} & \textbf{Status} \\
+\midrule
+\endfirsthead
+\multicolumn{6}{c}{\tablename~\thetable{} -- Fortsetzung}\\
+\toprule
+\textbf{Nr.} & \textbf{Anforderung} & \textbf{Prio} & \textbf{SP} & \textbf{Zust\"andig} & \textbf{Status} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{6}{r}{\footnotesize Fortsetzung n\"achste Seite}\\
+\endfoot
+\bottomrule
+\endlastfoot
+
+A-01 & Sessionverwaltung inkl.\ CSRF-Token-Erzeugung & Hoch & 5 & Maik & Erledigt \\
+A-02 & Registrierung mit serverseitiger Pr\"ufung und Passwort-Hashing & Hoch & 5 & Maik & Erledigt \\
+A-03 & Login/Logout mit Rollenweiterleitung (Admin/User) & Hoch & 5 & Maik & Erledigt \\
+A-04 & Automatisches Logout nach konfigurierbarer Inaktivit\"at & Hoch & 3 & Maik & Erledigt \\
+A-05 & CSRF-Schutz f\"ur alle schreibenden Formulare & Hoch & 3 & Maik & Erledigt \\
+A-06 & Brute-Force-Schutz: Login-Sperre nach Fehlversuchen & Mittel & 3 & Maik & Erledigt \\
+A-07 & Rate-Limiting der Registrierung pro IP-Adresse & Mittel & 3 & Marcel & Erledigt \\
+A-08 & Admin: Benutzer anlegen und l\"oschen & Hoch & 5 & Maik & Erledigt \\
+A-09 & Admin: Rolle umschalten, E-Mail und Passwort setzen & Hoch & 5 & Maik & Erledigt \\
+A-10 & Rechteverwaltung: Zugriffsschutz f\"ur Admin-Seiten & Hoch & 3 & Maik & Erledigt \\
+A-11 & Self-Service: E-Mail/Passwort \"andern, Account l\"oschen & Mittel & 5 & Maik & Erledigt \\
+A-12 & Zentrale Konfiguration \"uber Konfigurationsdatei & Mittel & 2 & Maik & Erledigt \\
+A-13 & Dynamische, responsive Navigation (Desktop/Mobile) & Hoch & 5 & Maik & Erledigt \\
+A-14 & Session-Timeout-Warndialog mit jQuery~UI & Mittel & 3 & Maik & Erledigt \\
+A-15 & Modul Metadaten-Bereiniger: EXIF-Daten entfernen & Hoch & 8 & Moritz & Erledigt \\
+A-16 & Ausgelesene EXIF-Daten als JSON-Export anbieten & Mittel & 3 & Moritz & Erledigt \\
+A-17 & Automatische Bildrotation anhand EXIF-Orientierung & Niedrig & 3 & Moritz & Erledigt \\
+A-18 & Modul Browser-Fingerprinting (Canvas, WebGL, u.\,a.) & Hoch & 8 & Jakob & Erledigt \\
+A-19 & Modul Live-Passwort-Checker (AJAX, Regex-St\"arke) & Hoch & 8 & Marcel & Erledigt \\
+A-20 & Leak-Abgleich via HaveIBeenPwned (k-Anonymity) & Mittel & 5 & Marcel & Erledigt \\
+A-21 & Rechtsseiten Impressum/Datenschutz/AGB inkl.\ Footer & Mittel & 3 & Marcel & Erledigt \\
+A-22 & Durchg\"angiges CSS-Design (Cyber-Theme, responsive) & Mittel & 8 & Moritz & Erledigt \\
+A-23 & Sichere IP-Ermittlung hinter Proxy/Cloudflare & Niedrig & 3 & Maik & Erledigt \\
+A-24 & Git-Repository, Branch- und Merge-Workflow & Mittel & 3 & Jakob & Erledigt \\
+A-25 & Abgabevorbereitung (SQL-Dump, php.ini-Hinweise, Test) & Hoch & 3 & Alle & Erledigt \\
+\end{longtable}
+\end{small}

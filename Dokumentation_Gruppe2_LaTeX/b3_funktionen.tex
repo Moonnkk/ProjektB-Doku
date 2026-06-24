@@ -1,0 +1,77 @@
+% !TEX root = master.tex
+\chapter{Funktionale Umsetzung: Funktion und Skript}
+\label{ch:b-funktionen}
+
+Analog zu Projekt~A ordnet dieses Kapitel die Funktionalit\"aten den jeweiligen Skripten zu
+(Tabelle~\ref{tab:b-funktionen}).
+
+\begingroup
+\small
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.3}
+\begin{longtable}{@{}L{4.4cm} L{4.4cm} L{4.7cm}@{}}
+\caption{Zuordnung Funktionalit\"at zu Skript (Projekt~B)}
+\label{tab:b-funktionen}\\
+\toprule
+\textbf{Funktionalit\"at} & \textbf{Skript / Datei} & \textbf{Kurzbeschreibung} \\
+\midrule
+\endfirsthead
+\multicolumn{3}{@{}l}{\small\itshape Tabelle \thetable{} -- Fortsetzung}\\
+\midrule
+\textbf{Funktionalit\"at} & \textbf{Skript / Datei} & \textbf{Kurzbeschreibung} \\
+\midrule
+\endhead
+\midrule
+\multicolumn{3}{r@{}}{\footnotesize\itshape Fortsetzung n\"achste Seite}\\
+\endfoot
+\bottomrule
+\endlastfoot
+
+\multicolumn{3}{@{}l}{\textbf{Buchung}}\\*
+\addlinespace[0.4ex]
+Buchungsformular & \texttt{booking.php} & Eingabemaske f\"ur die Buchung \\
+Echtzeit-Kostenberechnung & \texttt{js/booking.js} & Personen $\times$ Tage $\times$ Preis + Ausfl\"uge \\
+Dynamische Personenfelder & \texttt{js/booking.js} & Felder je nach Personenzahl \\
+Clientseitige Validierung & \texttt{js/booking.js} & Pflichtfelder und Datumspr\"ufung \\
+Buchungsverarbeitung & \texttt{process\_booking.php} & POST auswerten, Preis berechnen, Kartennummer maskieren \\
+Datenspeicherung (JSON + Zeitstempel) & \texttt{process\_booking.php} & Ablage je Buchung unter \texttt{bookings/} \\
+Buchungsbest\"atigung & \texttt{confirmation.php} & Zusammenfassung aus der Session \\
+GET-/POST-Demonstration & \texttt{formcheck.php} & Test der Formular\"ubertragung \\
+\addlinespace[0.8ex]
+
+\multicolumn{3}{@{}l}{\textbf{Oberfl\"ache und Navigation}}\\*
+\addlinespace[0.4ex]
+Hell-/Dunkel-Modus & \texttt{js/main.js} & Umschaltung, gespeichert im \texttt{localStorage} \\
+Mobiles Men\"u / Navigation & \texttt{js/main.js}, \texttt{includes/header.php} & responsive Navigation \\
+News-Ticker / Besucherz\"ahler & \texttt{includes/footer.php} & Z\"ahlung \"uber \texttt{visitor\_count.txt} \\
+Gemeinsamer Kopf-/Fu\ss{}bereich & \texttt{includes/header.php}, \texttt{includes/footer.php} & wiederverwendbare Bausteine \\
+Gestaltung / Theme & \texttt{css/style.css} & Farbschema, Layout, Hell-/Dunkel-Modus \\
+\addlinespace[0.8ex]
+
+\multicolumn{3}{@{}l}{\textbf{Inhaltsseiten}}\\*
+\addlinespace[0.4ex]
+Kundenstimmen & \texttt{tours.php} & mehrere Bewertungen \\
+Teamseite & \texttt{about.php} & Vorstellung des fiktiven Teams \\
+Rechtliche Seiten & \texttt{legal.php} & Impressum, Datenschutz, AGB \\
+\end{longtable}
+\endgroup
+
+\section{Echtzeit-Kostenberechnung}
+Die Buchungsseite berechnet den Gesamtpreis ohne Neuladen der Seite. Bei jeder \"Anderung der
+Eingaben (Personenzahl, Reisedauer, ausgew\"ahlte Ausfl\"uge) wird der Preis neu ermittelt und als
+Zusammenfassung angezeigt. Die Grundkosten ergeben sich aus Personenzahl, Anzahl der Tage und dem
+Tagespreis; hinzu kommen die Kosten der gew\"ahlten Ausfl\"uge.
+
+\begin{lstlisting}[language=Java,caption={Kern der Kostenberechnung (Auszug \texttt{js/booking.js})},label={lst:b-cost}]
+var baseCost = persons * days * pricePerDay;     // Grundpreis
+var excursionCost = 0;                           // Summe der Ausfluege
+// ... Aufsummieren der ausgewaehlten Ausfluege ...
+var total = baseCost + excursionCost;            // Gesamtpreis
+\end{lstlisting}
+
+\section{Speicherung der Buchungen}
+Bei Absenden des Formulars wertet \texttt{process\_booking.php} die \"ubermittelten Daten aus,
+berechnet den Gesamtpreis erneut serverseitig und maskiert die angegebene Kreditkartennummer.
+Jede Buchung wird anschlie\ss{}end mit einem Zeitstempel als eigene \ac{json}-Datei im Verzeichnis
+\texttt{bookings/} gespeichert (Dateiname nach dem Muster \texttt{ST-JJJJMMTT-XXXXXX.json}). Die
+Zusammenfassung wird \"uber die Session an die Best\"atigungsseite \"ubergeben.

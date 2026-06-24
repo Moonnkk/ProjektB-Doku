@@ -1,0 +1,26 @@
+% !TEX root = master.tex
+\chapter{Installation}
+\label{ch:b-installation}
+
+\section{Systemvoraussetzungen}
+SunShine~Tours ben\"otigt lediglich eine Standard-XAMPP-Umgebung mit Apache und \ac{php}. Eine
+Datenbank wird \emph{nicht} ben\"otigt, da die Daten dateibasiert gespeichert werden. Besondere
+PHP-Erweiterungen sind nicht erforderlich.
+
+\section{Installationsschritte}
+\begin{enumerate}
+  \item \textbf{Projekt kopieren.} Den Projektordner in das Webserver-Wurzelverzeichnis legen
+        (bei XAMPP: \texttt{C:\textbackslash\allowbreak xampp\textbackslash\allowbreak htdocs}).
+  \item \textbf{Schreibrechte pr\"ufen.} Das Verzeichnis \texttt{bookings/} sowie die Datei
+        \texttt{visitor\_\allowbreak count.txt} m\"ussen f\"ur den Webserver beschreibbar sein, damit Buchungen
+        gespeichert und der Besucherz\"ahler aktualisiert werden k\"onnen.
+  \item \textbf{Aufruf.} Die Anwendung \"uber
+        \texttt{http://localhost/\allowbreak<Projektordner>/\allowbreak index.php} im Browser \"offnen.
+\end{enumerate}
+
+\section{Zugangsdaten}
+F\"ur Betrieb und Bewertung sind \textbf{keine Zugangsdaten erforderlich}. Die Anwendung besitzt
+weder eine Anmeldung noch eine Datenbank. Die im Buchungsformular abgefragten Zahlungsdaten
+dienen ausschlie\ss{}lich Demonstrationszwecken; die Kreditkartennummer wird vor der Speicherung
+maskiert. Die gespeicherten Buchungen liegen als \ac{json}-Dateien im Verzeichnis
+\texttt{bookings/}.

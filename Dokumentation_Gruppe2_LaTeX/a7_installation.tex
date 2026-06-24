@@ -1,0 +1,46 @@
+% !TEX root = master.tex
+\chapter{Installation und Zugangsdaten}
+\label{ch:a-installation}
+
+\section{Systemvoraussetzungen}
+GuardX setzt eine Standard-XAMPP-Umgebung voraus: Apache als Webserver, \ac{php}~8.2 sowie
+MariaDB. Zus\"atzlich m\"ussen einige PHP-Erweiterungen aktiv sein (siehe unten).
+
+\section{Installationsschritte}
+\begin{enumerate}
+  \item \textbf{Projekt kopieren.} Den gesamten Projektordner in das Webserver-Wurzelverzeichnis
+        legen (bei XAMPP: \texttt{C:\textbackslash\allowbreak xampp\textbackslash\allowbreak htdocs}).
+  \item \textbf{PHP-Erweiterungen aktivieren.} In der \texttt{php.ini} (bei XAMPP
+        \texttt{C:\textbackslash\allowbreak xampp\textbackslash\allowbreak php\textbackslash\allowbreak php.ini}) m\"ussen die
+        Erweiterungen \texttt{gd}, \texttt{mbstring}, \texttt{exif} und \texttt{curl} aktiv (nicht
+        auskommentiert) sein. Anschlie\ss{}end Apache neu starten. Die ben\"otigten Eintr\"age sind
+        in der mitgelieferten Datei \texttt{php.ini.hinweise} dokumentiert.
+  \item \textbf{Datenbank importieren.} In phpMyAdmin eine Datenbank \texttt{users} anlegen und den
+        Dump \texttt{db/users.sql} importieren. Damit werden Struktur \emph{und} Beispieldaten
+        angelegt.
+  \item \textbf{Schreibrechte pr\"ufen.} Die Verzeichnisse unter
+        \texttt{include/metadata\_stripping/} (\texttt{uploads/}, \texttt{clean/}) m\"ussen f\"ur
+        den Webserver beschreibbar sein. Sie werden bei Bedarf automatisch angelegt.
+  \item \textbf{Aufruf.} Die Anwendung \"uber \texttt{http://localhost/\allowbreak<Projektordner>/\allowbreak index.php}
+        im Browser \"offnen.
+\end{enumerate}
+
+\enlargethispage{4\baselineskip}
+\section{Zugangsdaten}
+Tabelle~\ref{tab:a-zugang} listet alle f\"ur Betrieb und Bewertung notwendigen Zugangsdaten.
+
+\begin{table}[!ht]
+\centering
+\caption{Zugangsdaten Projekt~A}
+\label{tab:a-zugang}
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\textbf{Zweck} & \textbf{Benutzer} & \textbf{Passwort / Wert} \\
+\midrule
+Datenbank (MariaDB) & \texttt{root} & (leer -- XAMPP-Standard) \\
+Datenbankname       & \multicolumn{2}{l}{\texttt{users} (Host: \texttt{localhost})} \\
+Demo-Login (User)   & \texttt{UdoErdmann} & \texttt{AbgabeGruppe2} \\
+Demo-Login (Admin)  & \texttt{UdoAdmin}   & \texttt{AbgabeGruppe2} \\
+\bottomrule
+\end{tabularx}
+\end{table}

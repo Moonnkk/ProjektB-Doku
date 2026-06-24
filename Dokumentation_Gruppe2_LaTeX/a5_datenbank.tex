@@ -1,0 +1,86 @@
+% !TEX root = master.tex
+\chapter{Datenstrukturen und Tabellen (SQL-Server)}
+\label{ch:a-datenbank}
+
+Die Anwendung nutzt die MariaDB-Datenbank \texttt{users}. Sie umfasst drei Tabellen: \texttt{user}
+f\"ur die Benutzerkonten sowie \texttt{login\_logs} und \texttt{register\_logs} f\"ur
+sicherheitsrelevante Protokollierung. Alle Tabellen besitzen einen aufsteigenden
+Prim\"arschl\"ussel \texttt{id}. Zwischen \texttt{login\_logs.user\_id} und \texttt{user.id}
+besteht eine logische Zuordnung (Fremdschl\"usselbeziehung), die in der Anwendung ausgewertet wird.
+
+\section{Tabelle \texttt{user}}
+Speichert die Benutzerkonten. Das Passwort wird ausschlie\ss{}lich als bcrypt-Hash abgelegt;
+\texttt{is\_admin} steuert die Rolle.
+
+\begin{table}[htbp]
+\centering
+\caption{Spalten der Tabelle \texttt{user}}
+\label{tab:db-user}
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\textbf{Spalte} & \textbf{Typ} & \textbf{Bedeutung} \\
+\midrule
+\texttt{id}       & INT, PK, AUTO\_INCREMENT & Eindeutige Benutzer-ID \\
+\texttt{username} & TEXT, NOT NULL           & Anmeldename (eindeutig gepr\"uft) \\
+\texttt{email}    & VARCHAR(100), NULL       & Optionale E-Mail-Adresse \\
+\texttt{password} & VARCHAR(255), NOT NULL   & bcrypt-Hash des Passworts \\
+\texttt{is\_admin}& TINYINT(1), Default 0    & Rolle: 1 = Admin, 0 = User \\
+\texttt{zeit}     & DATE, Default heute      & Anlagedatum des Kontos \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{lstlisting}[language=SQL,caption={CREATE-Statement der Tabelle \texttt{user}},label={lst:db-user}]
+CREATE TABLE `user` (
+  `id`       int(11)      NOT NULL,
+  `username` text         NOT NULL,
+  `email`    varchar(100) DEFAULT NULL,
+  `password` varchar(255) NOT NULL,
+  `is_admin` tinyint(1)   NOT NULL DEFAULT 0,
+  `zeit`     date         NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+\end{lstlisting}
+
+\section{Tabelle \texttt{login\_logs}}
+Protokolliert jeden Login-Versuch. Anhand der fehlgeschlagenen Versuche eines Nutzers innerhalb
+eines Zeitfensters wird die Brute-Force-Sperre umgesetzt.
+
+\begin{table}[htbp]
+\centering
+\caption{Spalten der Tabelle \texttt{login\_logs}}
+\label{tab:db-loginlogs}
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\textbf{Spalte} & \textbf{Typ} & \textbf{Bedeutung} \\
+\midrule
+\texttt{id}         & INT, PK, AUTO\_INCREMENT & Eindeutige Log-ID \\
+\texttt{user\_id}   & INT, NOT NULL            & Bezug auf \texttt{user.id} \\
+\texttt{ip\_address}& VARCHAR(45)              & IP-Adresse (IPv4/IPv6) \\
+\texttt{login\_time}& DATETIME, Default jetzt  & Zeitpunkt des Versuchs \\
+\texttt{success}    & TINYINT(1), Default 1    & 1 = erfolgreich, 0 = fehlgeschlagen \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Tabelle \texttt{register\_logs}}
+Protokolliert Registrierungen je IP-Adresse und erm\"oglicht so das Rate-Limiting (maximale Anzahl
+neuer Konten pro IP und Tag).
+
+\begin{table}[htbp]
+\centering
+\caption{Spalten der Tabelle \texttt{register\_logs}}
+\label{tab:db-registerlogs}
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\textbf{Spalte} & \textbf{Typ} & \textbf{Bedeutung} \\
+\midrule
+\texttt{id}           & INT, PK, AUTO\_INCREMENT & Eindeutige Log-ID \\
+\texttt{ip\_address}  & VARCHAR(45)              & IP-Adresse der Registrierung \\
+\texttt{attempt\_time}& DATETIME, Default jetzt  & Zeitpunkt der Registrierung \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Alle Datenbankzugriffe erfolgen ausschlie\ss{}lich \"uber \emph{Prepared Statements}, um
+SQL-Injection zu verhindern~\autocite{php-preparedstatements}. Die vollst\"andige Struktur
+inklusive Beispieldaten liegt im Dump \texttt{db/users.sql} (vgl.\ Kapitel~\ref{ch:a-installation}).
